@@ -1,0 +1,46 @@
+/* Styles for the InputForm component */
+.prompt-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #343541;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .prompt-bar input {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    margin-right: 1rem;
+    font-size: 1rem;
+  }
+  
+  .prompt-bar input:focus {
+    outline: none;
+  }
+  
+  .prompt-bar button {
+    padding: 0.75rem 1.5rem;
+    background-color: #10a37f;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .prompt-bar button:hover {
+    background-color: #0e8d6c;
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  

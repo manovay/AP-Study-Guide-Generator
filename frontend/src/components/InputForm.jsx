@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import "./InputForm.css";
 
-function InputForm() {
+function InputForm({ onStudyGuideGenerated }) {
   const [topic, setTopic] = useState("");
-  const [studyGuide, setStudyGuide] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error message
+    setError("");
 
     try {
       const response = await fetch("http://localhost:8000/generate-guide", {
@@ -20,7 +20,7 @@ function InputForm() {
 
       if (response.ok) {
         const data = await response.json();
-        setStudyGuide(data.study_guide);
+        onStudyGuideGenerated(data.study_guide);
       } else {
         setError("Failed to generate study guide. Please try again.");
       }
@@ -31,27 +31,17 @@ function InputForm() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          placeholder="Enter a topic"
-          required
-        />
-        <button type="submit">Generate</button>
-      </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {studyGuide && (
-        <div>
-          <h2>Generated Study Guide</h2>
-          <p>{studyGuide}</p>
-        </div>
-      )}
-    </div>
+    <form className="prompt-bar" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
+        placeholder="Enter a topic..."
+        required
+      />
+      <button type="submit">Generate</button>
+      {error && <p className="error-message">{error}</p>}
+    </form>
   );
 }
 
