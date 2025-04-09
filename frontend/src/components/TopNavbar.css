@@ -1,0 +1,73 @@
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(59, 91, 71);
+    padding: 10px 20px;
+    color: rgb(248, 244, 231);
+    font-family: "Outfit", serif;
+    z-index: 1000;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .nav-container {
+    max-width: 1850px;
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-logo {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: "DM Serif Display", serif;
+    color: rgb(248, 244, 231);
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: rgb(248, 244, 231);
+    font-size: 1rem;
+    font-family: "Outfit", serif;
+    transition: color 0.3s ease;
+    padding: 10px;
+  }
+  
+  .nav-links a:hover {
+    color: rgb(129, 179, 139);
+  }
+  
+  .nav-links button {
+    padding: 8px 20px;
+    font-size: 1rem;
+    font-family: "Outfit", serif;
+    font-weight: 500;
+    color: rgb(248, 244, 231);
+    background-color: rgb(93, 144, 112);
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .nav-links button:hover {
+    background-color: rgb(129, 179, 139);
+    transform: scale(1.1);
+  }
+  
+  .main-content {
+    margin-top: 80px; /* Leave space for the navbar */
+    text-align: center;
+  }
+  

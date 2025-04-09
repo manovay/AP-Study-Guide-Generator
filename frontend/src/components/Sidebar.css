@@ -1,0 +1,271 @@
+/* Sidebar Default */
+.sidebar {
+    position: fixed;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: rgb(31, 64, 32);
+    color: white;
+    transition: left 0.3s ease-in-out;
+  }
+  
+  /* When Sidebar is Closed */
+  .sidebar.closed {
+    width: 0px;
+    overflow: hidden;
+  }
+  
+  .main-content {
+    transition: margin-left 0.3s ease-in-out;
+    padding: 20px;
+  }
+  
+  /* When Sidebar is Open */
+  .sidebar-open .main-content {
+    margin-left: 260px; /* Sidebar width + spacing */
+    width: calc(100% - 200px);
+  }
+  
+  /* When Sidebar is Closed */
+  .sidebar-closed .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  /* Sidebar Toggle Button */
+  .sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100;
+  }
+ 
+  /* Tooltip for Sidebar Button */
+  .tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 0.8rem;
+    padding: 5px;
+    border-radius: 5px;
+    top: 50%;
+    left: 40px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    display: block;
+  }
+  
+/* Sidebar title styling */
+.sidebar-title {
+    font-size: 1.6rem;
+    text-align: center;
+    padding: 1rem;
+    font-family: "Outfit", serif;
+    font-weight: bold;
+}
+
+/* Navigation links container */
+.nav-links-side {
+    margin-top: 50px;
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Individual navigation links */
+.nav-links-side li {
+    padding: 15px;
+    cursor: pointer;
+    font-family: "Outfit", serif;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    border-radius: 5px; /* Slightly rounded corners */
+}
+
+/* Hover effect for navigation links */
+.nav-links-side li:hover {
+    background-color: #669675; /* Highlight color */
+}
+
+/* Previous study guides section */
+/* Add max height and scrolling for study guide history */
+.history-section {
+    max-height: 40vh; /* Limits the history section height */
+    overflow-y: auto; /* Enables vertical scrolling */
+    margin-top: 10px;
+    padding: 10px;
+}
+/* History title */
+.history-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-family: "Outfit", serif;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* History list */
+.history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto; /* Enable scrolling */
+}
+
+/* Individual study guide entry */
+.history-list li {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    margin-bottom: 5px;
+    text-align: left;
+    font-family: "Outfit", serif;
+    transition: background-color 0.3s ease;
+}
+/* Style the scrollbar (optional) */
+.history-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-section::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+.history-section::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+/* Hover effect for history items */
+.history-list li:hover {
+    background-color: #4a7b5e;
+}
+
+/* Logout button */
+.nav-links-side .logout {
+    margin-top: auto;
+    text-align: center;
+    color: #d74747;
+    font-weight: bold;
+}
+
+/* Hover effect for logout */
+.nav-links-side .logout:hover {
+    background-color: #cc6c6c;
+    color: white;
+}
+
+
+/* Style the three-dot menu */
+.history-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .history-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Dropdown menu for rename & delete */
+  .dropdown-menu {
+    position: absolute;
+    right: 10px;
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .dropdown-menu span {
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .dropdown-menu span:hover {
+    background-color: #ddd;
+  }
+  
+  /* Style the rename input */
+  .rename-input {
+    font-size: 1rem;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    width: 90%;
+  }
+  
+  /* Sidebar styling remains unchanged */
+
+/* Study Guide container */
+.study-guide-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Three-dot menu button */
+  .menu-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+  }
+  
+  /* Show three-dot button when hovering over study guide */
+  .history-item:hover .menu-button {
+    display: inline-block;
+  }
+  
+  /* Dropdown menu for rename & delete */
+  .dropdown-menu {
+    position: absolute;
+    right: 10px;
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+  
+  .dropdown-menu span {
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .dropdown-menu span:hover {
+    background-color: #ddd;
+  }
+  
+  /* Rename input field */
+  .rename-input {
+    font-size: 1rem;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+    width: 90%;
+  }
+  

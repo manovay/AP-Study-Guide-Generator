@@ -3,13 +3,13 @@ import React from "react";
 function Navbar() {
   return (
     <nav style={navbarStyles}>
-      <div style={logoStyles}>StudyGuideAI</div>
+      <div style={logoStyles}>TooturAI</div>
     </nav>
   );
 }
 
 const navbarStyles = {
-  backgroundColor: "#202123",
+  backgroundColor: "#343541",
   color: "white",
   padding: "10px 20px",
   display: "flex",

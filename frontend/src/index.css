@@ -1,83 +1,39 @@
-/* Reset styles */
+
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+.main-content {
+  margin-top: 180px; /* Remove any default margins */
+  padding-top: 0;
+  padding-left: 0;
+}
+
+/* Ensure InputForm stretches properly */
+
+
 body, html, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: "Roboto", sans-serif;
-  background-color: #202123;
-  color: white;
+  background-color: #f5f0cb;
+  color: rgb(81, 53, 36);
 }
 
 /* Navbar styles */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #343541;
-  padding: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
 
-.navbar h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: white;
-}
+
+
 
 /* Main content styles */
-.content {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 100%;
-}
 
-.output-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  margin-bottom: 75px; /* To avoid overlapping with the prompt bar */
-}
 
-.output-area h1 {
-  text-align: center;
-  color: rgb(219, 216, 216);
-  margin-top: 15%;
-  font-weight: 100;
-  font-size: 4rem;
-}
-.output-area h2 {
-  text-align: center;
-  color: rgb(219, 216, 216);
-  font-size: 1.2rem;
-}
 
-.study-guide h2 {
-  margin-top: 0;
-}
 
-.study-guide p {
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
 
-.typing {
-  display: inline;
-}
 
-.typing::after {
-  content: "|";
-  animation: blink 1s steps(2, start) infinite;
-  color: white;
-}
 
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
+
+
+

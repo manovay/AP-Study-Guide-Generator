@@ -1,0 +1,66 @@
+.home-page {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.rotating-title {
+  font-family: "DM Serif Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  font-size: 4rem; /* Adjusted font size for better fit */
+  color: rgb(68, 110, 69);
+  padding: 20px;
+  max-width: 80%; /* Limit the width of the title */
+  margin: 0 auto; /* Center the title horizontally */
+  white-space: normal; /* Allow wrapping */
+  word-wrap: break-word; /* Ensure long words wrap to the next line */
+  overflow: hidden;
+  height: 150px; /* Fixed height */
+  display: flex; /* Align text vertically */
+  align-items: center; /* Vertical alignment */
+  justify-content: center; /* Center horizontally */
+  position: relative; /* Needed for cursor positioning */
+}
+
+.rotating-title::after {
+  content: ""; /* Create the blinking cursor */
+  display: inline-block;
+  width: 3px; /* Cursor width */
+  height: 1em; /* Match the height of the text (1em = font size) */
+  background-color: rgb(68, 110, 69); /* Cursor color */
+  margin-left: 5px; /* Space between the text and cursor */
+  animation: blink 0.7s steps(1) infinite;
+  vertical-align: text-bottom; /* Align cursor to the bottom of the text */
+}
+
+@keyframes blink {
+  50% {
+    background-color: transparent;
+  }
+}
+
+.options {
+  margin-top: 100px; /* Ensures buttons are visually separated */
+  position: relative;
+}
+
+.options button {
+  margin: 15px;
+  padding: 15px 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-family: "Outfit", serif;
+  font-weight: 500;
+  color: rgb(222, 230, 222);
+  background-color: rgb(68, 110, 69);
+  border-radius: 30px;
+  border: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.options button:hover {
+  background-color: rgb(122, 168, 123);
+  transform: scale(1.05); /* Adds a slight zoom effect on hover */
+}
