@@ -2,10 +2,10 @@
 .sidebar {
     position: fixed;
     left: 0;
-    width: 250px;
+    width: 260px;
     height: 100vh;
-    background-color: rgb(31, 64, 32);
-    color: white;
+    background-color: #202123;
+    color: #ffffff;
     transition: left 0.3s ease-in-out;
   }
   
@@ -22,7 +22,7 @@
   
   /* When Sidebar is Open */
   .sidebar-open .main-content {
-    margin-left: 260px; /* Sidebar width + spacing */
+    margin-left: 0px; /* Sidebar width + spacing */
     width: calc(100% - 200px);
   }
   
@@ -73,44 +73,66 @@
 .nav-links-side {
     margin-top: 50px;
     list-style-type: none;
-    padding: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    align-items: center;
+    height: auto; /* Change from 100vh to auto */
+    min-height: fit-content; /* Ensure it fits content */
+    overflow-y: auto;
 }
 
 /* Individual navigation links */
 .nav-links-side li {
-    padding: 15px;
+    width: 85%; /* Set a consistent width */
+    padding: 12px 16px;
     cursor: pointer;
-    font-family: "Outfit", serif;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    text-align: center;
-    border-radius: 5px; /* Slightly rounded corners */
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    background-color: rgba(255, 255, 255, 0.1); /* Light background */
+    border-radius: 6px; /* Rounded corners */
+    text-align: center; /* Center text */
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
 }
 
 /* Hover effect for navigation links */
 .nav-links-side li:hover {
-    background-color: #669675; /* Highlight color */
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px); /* Slight lift effect */
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Previous study guides section */
-/* Add max height and scrolling for study guide history */
-.history-section {
-    max-height: 40vh; /* Limits the history section height */
-    overflow-y: auto; /* Enables vertical scrolling */
-    margin-top: 10px;
-    padding: 10px;
+/* Active state for navigation links */
+.nav-links-side li.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
 }
-/* History title */
-.history-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    text-align: center;
-    font-weight: bold;
-    font-family: "Outfit", serif;
-    color: rgba(255, 255, 255, 0.9);
+
+/* Logout button specific styling */
+.nav-links-side .logout {
+    margin-top: 12px; /* Match the gap between other buttons */
+    margin-bottom: 20px;
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    position: relative; /* Change from sticky to relative */
+}
+
+/* Hover effect for logout */
+.nav-links-side .logout:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* History section adjustments */
+.history-section {
+    margin-top: 20px;
+    padding: 0 10px; /* Reduced padding to accommodate wider buttons */
+    width: 100%;
+    max-height: calc(100vh - 450px);
+    overflow-y: auto;
 }
 
 /* History list */
@@ -118,154 +140,195 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-y: auto; /* Enable scrolling */
+    padding-bottom: 100px; /* Add extra padding at the bottom */
 }
 
-/* Individual study guide entry */
-.history-list li {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    margin-bottom: 5px;
-    text-align: left;
-    font-family: "Outfit", serif;
-    transition: background-color 0.3s ease;
-}
-/* Style the scrollbar (optional) */
+/* Improve scrollbar styling */
 .history-section::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
+}
+
+.history-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
 }
 
 .history-section::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
 }
 
 .history-section::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-}
-/* Hover effect for history items */
-.history-list li:hover {
-    background-color: #4a7b5e;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Logout button */
-.nav-links-side .logout {
-    margin-top: auto;
-    text-align: center;
-    color: #d74747;
-    font-weight: bold;
+/* History title - make it stick to the top */
+.history-title {
+    font-size: 0.8rem;
+    color: #8e8ea0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    position: sticky;
+    top: 0;
+    background-color: #202123; /* Match sidebar background */
+    padding: 8px 0;
+    z-index: 1;
 }
 
-/* Hover effect for logout */
-.nav-links-side .logout:hover {
-    background-color: #cc6c6c;
-    color: white;
-}
-
-
-/* Style the three-dot menu */
-.history-item {
+/* History list items */
+.history-list li {
+    width: 95%;
+    padding: 0; /* Remove padding from li */
+    margin-bottom: 8px;
     position: relative;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .history-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Dropdown menu for rename & delete */
-  .dropdown-menu {
-    position: absolute;
-    right: 10px;
-    background: white;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .dropdown-menu span {
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  .dropdown-menu span:hover {
-    background-color: #ddd;
-  }
-  
-  /* Style the rename input */
-  .rename-input {
-    font-size: 1rem;
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 5px;
-    width: 90%;
-  }
-  
-  /* Sidebar styling remains unchanged */
+    cursor: pointer; /* Add cursor pointer to entire li */
+}
 
 /* Study Guide container */
 .study-guide-container {
+    width: 100%;
+    padding: 8px 12px; /* Move padding from li to container */
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-  }
-  
-  /* Three-dot menu button */
-  .menu-button {
+}
+
+/* Hover effect for the container */
+.history-list li:hover .study-guide-container {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Text container for history items */
+.study-guide-container span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    padding-right: 24px;
+    cursor: pointer; /* Add cursor pointer to text */
+    pointer-events: none; /* Prevent text from capturing clicks */
+}
+
+/* Menu button (three dots) */
+.menu-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
     background: none;
     border: none;
-    color: white;
-    font-size: 1.2rem;
+    color: #ffffff;
+    font-size: 16px;
     cursor: pointer;
-    display: none; /* Initially hidden */
-  }
-  
-  /* Show three-dot button when hovering over study guide */
-  .history-item:hover .menu-button {
-    display: inline-block;
-  }
-  
-  /* Dropdown menu for rename & delete */
-  .dropdown-menu {
-    position: absolute;
-    right: 10px;
-    background: white;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 5px;
+    opacity: 0;
+    padding: 4px;
+    border-radius: 4px;
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-  }
-  
-  .dropdown-menu span {
+    align-items: center;
+    justify-content: center;
+    z-index: 2; /* Ensure button stays above container */
+}
+
+/* Show menu button on history item hover */
+.history-list li:hover .menu-button {
+    opacity: 0.7;
+}
+
+.menu-button:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown menu - ChatGPT style */
+.dropdown-menu {
+    position: fixed; /* Change from absolute to fixed */
+    left: 260px; /* Width of the sidebar */
+    width: 120px;
+    background-color: #202123;
+    border: 1px solid #343541;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 9999; /* Increase z-index significantly */
+    overflow: hidden;
+}
+
+/* Dropdown menu items */
+.dropdown-menu span {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    color: #ececf1;
+    font-size: 13px;
     cursor: pointer;
-    padding: 5px;
-  }
-  
-  .dropdown-menu span:hover {
-    background-color: #ddd;
-  }
-  
-  /* Rename input field */
-  .rename-input {
-    font-size: 1rem;
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 5px;
-    width: 90%;
-  }
+    transition: background-color 0.2s ease;
+    text-align: left;
+    line-height: 1;
+}
+
+/* Hover state for dropdown items */
+.dropdown-menu span:hover {
+    background-color: #343541;
+}
+
+/* Delete option specific styling */
+.dropdown-menu span:last-child {
+    color: #ef4444; /* Red color for delete */
+}
+
+/* Remove previous icon styles and add new ones */
+.dropdown-menu span:first-child::before {
+    content: "✏️";
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+.dropdown-menu span:last-child::before {
+    content: "🗑️";
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+/* Rename input field */
+.rename-input {
+    width: calc(100% - 32px);
+    padding: 6px 8px;
+    border: 1px solid #565869;
+    border-radius: 4px;
+    background-color: #343541;
+    color: #ffffff;
+    font-size: 13px;
+    font-family: "Inter", sans-serif;
+}
+
+.rename-input:focus {
+    outline: none;
+    border-color: #565869;
+}
+
+/* Add a subtle animation for the dropdown */
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-menu {
+    animation: dropdownFade 0.1s ease-out;
+}
   

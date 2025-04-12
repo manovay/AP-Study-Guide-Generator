@@ -1,43 +1,92 @@
-@import url('https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 .input-form {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Ensure full viewport height */
+    height: 100vh;
     width: 100%;
-    background-color: #f5f0cb;
-    padding: 0 5%; /* Dynamically adjust padding based on screen size */ /* Ensure content isn't pushed too far */
-    overflow: hidden; /* Keep content inside viewport */
+    background-color: #ffffff;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* When sidebar is open */
+.sidebar-open .input-form {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+}
+
+/* When sidebar is closed */
+.sidebar-closed .input-form {
+    width: 100%;
+    margin-left: 0;
 }
 
 .user-chat-bubble {
-    background-color: #4a90e2; /* Blue bubble like ChatGPT */
-    color: white;
-    padding: 10px 15px;
-    border-radius: 15px;
+    background-color: #f7f7f8;
+    color: #353740;
+    padding: 16px 24px;
+    border-radius: 8px;
     max-width: 60%;
-    align-self: flex-end; /* Align to the right */
-    margin: 10px 10px 10px auto; /* Push to right side */
+    align-self: flex-end;
+    margin: 10px 10px 10px auto;
     text-align: left;
-    font-size: 1rem;
-    font-family: "Outfit", sans-serif;
-  }
+    font-size: 0.95rem;
+    font-family: "Inter", sans-serif;
+}
 
 /* STUDY GUIDE OUTPUT */
 .study-guide-output {
     display: flex;
-    flex-wrap: nowrap;
     flex-direction: column;
     overflow-y: auto;
-    padding: 10px 15%; /* Left and right spacing */
-    font-family: 'Outfit', sans-serif;
-    line-height: 1.8;
-    color: rgb(18, 50, 30);
-    font-size: 1.2rem;
+    height: calc(100vh - 120px);
+    width: 100%;
+    padding: 24px 15%; /* Restore original padding */
+    font-family: "Inter", sans-serif;
+    line-height: 1.6; /* Restore line spacing */
+    color: #353740;
+    font-size: 1rem;
+}
+
+/* Add custom scrollbar styling */
+.study-guide-output::-webkit-scrollbar {
+    width: 8px;
+    position: absolute;
+    right: 0;
+}
+
+.study-guide-output::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.study-guide-output::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.study-guide-output::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Content container for centering */
+.study-guide-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6; /* Ensure consistent line spacing */
+}
+
+/* Ensure all text content is left-aligned with proper spacing */
+.study-guide-output p,
+.study-guide-output h1,
+.study-guide-output h2,
+.study-guide-output h3,
+.study-guide-output ul,
+.study-guide-output ol {
     text-align: left;
-    max-width: 800px; /* Restrict max width */
-    height: calc(100vh - 120px); /* Prevents content overflow */
+    width: 100%;
+    margin-bottom: 1rem; /* Add spacing between elements */
 }
 
 /* Ensure bullet points are properly formatted */
@@ -48,77 +97,110 @@
 
 /* Markdown Header Styling */
 .study-guide-output h2 {
-    color: rgb(67, 100, 74);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
+    color: #202123;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     text-align: left;
+    margin: 1.5rem 0 1rem;
 }
 
-/* Placeholder Text when No Study Guide is Displayed */
-.study-guide-output .placeholder-text {
-    padding-left: 60px;
+/* Placeholder Text Container */
+.placeholder-container {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
     text-align: center;
-    color: rgb(38, 75, 39);
-    font-size: 3.8rem;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 350;
-    max-width: 800px;
-    margin: 20px auto;
+}
+
+/* Main Placeholder Text */
+.study-guide-output .placeholder-text {
+    text-align: center;
+    color: #6e6e80;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+/* Caption Text */
+.study-guide-output .placeholder-caption {
+    text-align: center;
+    color: #8e8ea0;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
 }
 
 /* INPUT BAR AT BOTTOM */
 .prompt-bar {
     position: fixed;
-    bottom: 10px;
-    left: 270px; /* Account for sidebar */
-    width: calc(95% - 300px);
-    background-color: rgb(59, 91, 71);
-    padding: 12px 20px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px; /* Match study-guide-content max-width */
+    background-color: #ffffff;
+    padding: 12px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* Adjust prompt bar position when sidebar is open */
+.sidebar-open .prompt-bar {
+    width: 90%;
+    max-width: 800px;
+    transform: translateX(calc(-50% + 130px)); /* Half of sidebar width */
 }
 
 /* TEXT INPUT */
 .prompt-bar input {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', sans-serif;
     flex-grow: 1;
-    padding: 12px 15px;
-    font-size: 1.2rem;
-    border-radius: 20px;
-    border: 2px solid rgb(255, 255, 255);
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
     outline: none;
     display: flex;
-    margin-right: 20px;
-    color: rgb(50, 50, 50);
-    background-color: rgb(240, 248, 255);
+    margin-right: 16px;
+    color: #353740;
+    background-color: #ffffff;
     transition: border-color 0.3s ease;
 }
 
 .prompt-bar input:focus {
-    border-color: rgb(29, 67, 123);
+    border-color: #40414f;
 }
 
 /* GENERATE BUTTON */
 .prompt-bar button {
-    display:flex;
-    padding: 12px 30px;
-    font-size: 1.2rem;
-    font-family: "Outfit", serif;
+    display: flex;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-family: "Inter", sans-serif;
     font-weight: 500;
-    color: rgb(248, 244, 231);
-    background-color: rgb(129, 184, 134);
-    border-radius: 20px;
+    color: #ffffff;
+    background-color: #202123;
+    border-radius: 4px;
     border: none;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
+    min-width: 100px;
 }
 
 .prompt-bar button:hover {
-    background-color: rgb(183, 235, 199);
-    transform: scale(1.02);
+    background-color: #40414f;
 }
 
 /* LOADING ANIMATION */
@@ -131,31 +213,63 @@
 }
 
 .loading-spinner {
-    width: 30px;
-    height: 30px;
-    border: 5px solid rgba(157, 237, 161, 0.699);
-    border-top: 5px solid rgb(252, 255, 217);
+    width: 24px;
+    height: 24px;
+    border: 2px solid #e5e5e5;
+    border-top: 2px solid #202123;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.user-message {
+    background-color: #f7f7f8;
+    color: #353740;
+    padding: 16px 24px;
+    border-radius: 8px;
+    max-width: 60%;
+    margin-left: auto;
+    text-align: left;
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1200px) {
+    .study-guide-content {
+        max-width: 700px;
     }
-    to {
-        transform: rotate(360deg);
+    
+    .prompt-bar {
+        max-width: 700px;
     }
 }
-.user-message {
-    background-color: #5d7e5f;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 60%;
-    margin-left: auto; /* Align right */
-    text-align: left;
-  }
+
+@media screen and (max-width: 768px) {
+    .study-guide-content {
+        padding: 0 20px;
+        max-width: 600px;
+    }
+    
+    .prompt-bar {
+        width: 95%;
+        max-width: 600px;
+    }
+    
+    .sidebar-open .prompt-bar {
+        transform: translateX(calc(-50% + 130px));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .study-guide-content {
+        padding: 0 16px;
+    }
+}
 
   

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./HomePage.css";
 
-function HomePage({ onNavigate, setSelectedStudyGuide }) {
+function HomePage({ onNavigate, setSelectedStudyGuide, isSidebarOpen }) {
   const titles = [
     "Got an exam coming up?",
     "Not sure where to start studying?",
@@ -45,7 +45,7 @@ function HomePage({ onNavigate, setSelectedStudyGuide }) {
   }, [charIndex, isDeleting, currentIndex, speed, titles]);
 
   return (
-    <div className="home-page">
+    <div className={`home-page ${isSidebarOpen ? 'sidebar-open' : ''}`}>
       <h1 className="rotating-title">{currentTitle}</h1>
       <div className="options">
       <button onClick={() => {

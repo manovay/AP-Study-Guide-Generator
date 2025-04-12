@@ -1,66 +1,5 @@
-
-// import React, { useEffect, useState } from "react";
-// import "./Sidebar.css";
-
-// function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, setSelectedStudyGuide, history }) {
-//   const [studyGuides, setStudyGuides] = useState([]);
-
-//   useEffect(() => {
-//     if (user) {
-//       fetch(`http://localhost:8000/api/get-study-guides?email=${user.email}`)
-//         .then((response) => response.json())
-//         .then((data) => {
-//           setStudyGuides(data.study_guides || []);
-//         })
-//         .catch((error) => console.error("Error fetching study guides:", error));
-//     }
-//   }, [user, history]); 
-
-//   return (
-//     <div className="sidebar">
-//       <ul className="nav-links-side">
-//         <li onClick={() => onNavigate("home")}>Home</li>
-//         <li onClick={() => {
-//     onSelectHistory(null); // Reset previous study guide
-//     onNavigate("studyGuide");
-// }}>
-//   New Study Guide
-// </li>
-
-        
-
-//         <li onClick={() => onNavigate("flashcards")}>Flashcards</li>
-//         <li onClick={() => onNavigate("studyPlan")}>Study Plan</li>
-//         <li onClick={() => onNavigate("practiceTests")}>Practice Tests</li>
-//         <li className="logout" onClick={onLogout}>Logout</li>
-//         {/* Display past study guides */}
-//         {studyGuides.length > 0 && currentPage === "studyGuide"&& (
-//           <div className="history-section">
-//             <h3 className="history-title"></h3>
-//             <ul className="history-list">
-//               {studyGuides.map((guide) => (
-//                 <li key={guide._id} onClick={() => {
-//                     if (!guide.conversation || guide.conversation.length === 0) {
-//                       guide.conversation = [
-//                         { user_prompt: guide.title, response: guide.content }
-//                       ];
-//                     }
-//                     onSelectHistory(guide);
-//                   }}>
-//                     {guide.title}
-//                   </li>
-//               ))}
-//             </ul>
-//           </div>
-//         )}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default Sidebar;
-
 import React, { useEffect, useState, useRef } from "react";
+import ReactDOM from "react-dom";
 import "./Sidebar.css";
 
 function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, setSelectedStudyGuide, history, isSidebarOpen, setIsSidebarOpen }) {
@@ -92,6 +31,25 @@ function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, set
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Add click-away handler
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuVisible(null); // Close the dropdown
+      }
+    }
+
+    // Add event listener when dropdown is open
+    if (menuVisible !== null) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuVisible]);
 
   // Handle renaming a study guide
   const handleRename = async (studyGuideId) => {
@@ -150,6 +108,41 @@ function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, set
     }
   };
 
+  // Add this function to calculate dropdown position
+  const getDropdownPosition = (buttonElement) => {
+    if (!buttonElement) return {};
+    const rect = buttonElement.getBoundingClientRect();
+    return {
+      top: rect.top,
+      left: 260, // Sidebar width
+    };
+  };
+
+  // Modify the render of dropdown menu
+  const renderDropdown = (guide) => {
+    if (menuVisible !== guide._id) return null;
+
+    return ReactDOM.createPortal(
+      <div 
+        className="dropdown-menu" 
+        ref={menuRef}
+        style={getDropdownPosition(document.querySelector(`[data-guide-id="${guide._id}"]`))}
+      >
+        <span onClick={() => {
+          setEditMode(guide._id);
+          setNewTitle(guide.title);
+          setMenuVisible(null);
+        }}>
+          Rename
+        </span>
+        <span onClick={() => handleDelete(guide._id)}>
+          Delete
+        </span>
+      </div>,
+      document.body
+    );
+  };
+
   return (
     <div className={`sidebar ${!isSidebarOpen ? "closed" : ""}`}> {/* Fix className */}
       <button className="sidebar-toggle" onClick={() => setIsSidebarOpen((prev) => !prev)}>
@@ -179,10 +172,12 @@ function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, set
             <h3 className="history-title">Activity</h3>
             <ul className="history-list">
               {studyGuides.map((guide) => (
-                <li key={guide._id} className="history-item">
-                  {/* Study Guide Button */}
+                <li 
+                  key={guide._id} 
+                  className="history-item"
+                  onClick={() => onSelectHistory(guide)}
+                >
                   <div className="study-guide-container">
-                    {/* Click to Open Study Guide */}
                     {editMode === guide._id ? (
                       <input
                         type="text"
@@ -192,30 +187,24 @@ function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, set
                         onKeyDown={(e) => e.key === "Enter" && handleRename(guide._id)}
                         className="rename-input"
                         autoFocus
+                        onClick={(e) => e.stopPropagation()}
                       />
                     ) : (
-                      <span onClick={() => onSelectHistory(guide)}>{guide.title}</span>
+                      <span>{guide.title}</span>
                     )}
-
-                    {/* Three-dot menu button */}
+                    
                     <button
                       className="menu-button"
+                      data-guide-id={guide._id}
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent study guide from being selected when clicking menu
+                        e.stopPropagation();
                         setMenuVisible(menuVisible === guide._id ? null : guide._id);
                       }}
                     >
                       ⋮
                     </button>
                   </div>
-
-                  {/* Show Rename & Delete only when three-dot menu is clicked */}
-                  {menuVisible === guide._id && (
-                    <div className="dropdown-menu" ref={menuRef}>
-                      <span onClick={() => setEditMode(guide._id)}>✏ Rename</span>
-                      <span onClick={() => handleDelete(guide._id)}>🗑 Delete</span>
-                    </div>
-                  )}
+                  {renderDropdown(guide)}
                 </li>
               ))}
             </ul>

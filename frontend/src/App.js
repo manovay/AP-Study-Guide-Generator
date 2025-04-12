@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import WelcomePage from "./components/WelcomePage";
@@ -189,12 +188,13 @@ useEffect(() => {
           <HomePage
             onNavigate={(page) => {
               if (page === "studyGuide") {
-                setSelectedStudyGuide(null); // ✅ Reset selected study guide
+                setSelectedStudyGuide(null);
                 setStudyGuide("");
               }
               setCurrentPage(page);
             }}
             setSelectedStudyGuide={setSelectedStudyGuide}
+            isSidebarOpen={isSidebarOpen}
           />
         );
       default:

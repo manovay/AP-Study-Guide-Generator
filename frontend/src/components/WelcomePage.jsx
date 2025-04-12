@@ -79,7 +79,7 @@ function WelcomePage({ onLoginSuccess, onSignupSuccess, errorMessage, setErrorMe
   });
 
   return (
-    <div className="welcome-page">
+    <div className="welcome-page full-width">
       <nav className="top-navbar">
         <div className="nav-container">
           <div className="nav-logo">Tootur</div>
@@ -91,8 +91,8 @@ function WelcomePage({ onLoginSuccess, onSignupSuccess, errorMessage, setErrorMe
           </div>
         </div>
       </nav>
-      <div className="main-content">
-        <h1 className="sour-gummy-ali">Welcome to Tootur!</h1>
+      <div className="welcome-content">
+        <h1 className="sour-gummy-ali">{titleText}</h1>
         <p className="para">Please log in or sign up to get started.</p>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>

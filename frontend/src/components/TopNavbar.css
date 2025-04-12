@@ -3,71 +3,78 @@
     top: 0;
     left: 0;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgb(59, 91, 71);
-    padding: 10px 20px;
-    color: rgb(248, 244, 231);
-    font-family: "Outfit", serif;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
     z-index: 1000;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .nav-container {
-    max-width: 1850px;
-    width: 95%;
+}
+
+.nav-container {
+    height: 100%;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .nav-logo {
-    font-size: 2rem;
-    font-weight: bold;
-    font-family: "DM Serif Display", serif;
-    color: rgb(248, 244, 231);
-  }
-  
-  .nav-links {
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #202123;
+}
+
+.nav-links {
     display: flex;
-    gap: 20px;
-  }
-  
-  .nav-links a {
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-links a {
     text-decoration: none;
-    color: rgb(248, 244, 231);
-    font-size: 1rem;
-    font-family: "Outfit", serif;
+    color: #353740;
+    font-size: 0.95rem;
     transition: color 0.3s ease;
-    padding: 10px;
-  }
-  
-  .nav-links a:hover {
-    color: rgb(129, 179, 139);
-  }
-  
-  .nav-links button {
-    padding: 8px 20px;
-    font-size: 1rem;
-    font-family: "Outfit", serif;
+}
+
+.nav-links a:hover {
+    color: #202123;
+}
+
+.nav-links button {
+    padding: 8px 16px;
+    font-size: 0.95rem;
     font-weight: 500;
-    color: rgb(248, 244, 231);
-    background-color: rgb(93, 144, 112);
-    border-radius: 20px;
+    color: #ffffff;
+    background-color: #202123;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .nav-links button:hover {
-    background-color: rgb(129, 179, 139);
-    transform: scale(1.1);
-  }
-  
-  .main-content {
+    transition: background-color 0.3s ease;
+}
+
+.nav-links button:hover {
+    background-color: #40414f;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-container {
+        padding: 0 16px;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .nav-links button {
+        padding: 6px 12px;
+    }
+}
+
+.main-content {
     margin-top: 80px; /* Leave space for the navbar */
     text-align: center;
-  }
+}
   

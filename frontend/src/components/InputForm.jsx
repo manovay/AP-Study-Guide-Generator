@@ -1,10 +1,8 @@
-
-
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import "./InputForm.css";
 
-function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelectedStudyGuide,  isSidebarOpen, setIsSidebarOpen}) {
+function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelectedStudyGuide, isSidebarOpen, setIsSidebarOpen }) {
   const [topic, setTopic] = useState("");
   const [followUp, setFollowUp] = useState(""); // New state for follow-ups
   const [error, setError] = useState("");
@@ -12,7 +10,6 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
   const [conversation, setConversation] = useState([]); // Store full conversation
   const [displayedText, setDisplayedText] = useState("");
   const [isHovered, setIsHovered] = useState(false); // Track hover state
-  const [userPrompts, setUserPrompts] = useState([]); // 🆕 Store user prompts
   // Load selected study guide's conversation history
   useEffect(() => {
     if (selectedStudyGuide) {
@@ -48,7 +45,7 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    setUserPrompts((prev) => [...prev, topic]);
+    
     try {
       const response = await fetch("http://localhost:8000/generate-guide", {
         method: "POST",
@@ -58,11 +55,11 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
 
       if (response.ok) {
         const data = await response.json();
-        setConversation(data.study_guide.conversation); // Load new guide's conversation
-        setSelectedStudyGuide(data.study_guide); // Update selected guide
+        setConversation(data.study_guide.conversation); // This will include both prompt and response
+        setSelectedStudyGuide(data.study_guide);
         if (data.study_guide.conversation.length > 0) {
-            startTypingEffect(data.study_guide.conversation[0].response || "");
-          }
+          startTypingEffect(data.study_guide.conversation[0].response || "");
+        }
         if (onStudyGuideGenerated) {
           onStudyGuideGenerated(data.study_guide.content, topic);
         }
@@ -128,7 +125,7 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
   };
 
   return (
-    <div className="input-form">
+    <div className={`input-form ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
      {/* Sidebar Toggle Button (☰) - Only on Study Guide Page */}
      <button
         className="sidebar-toggle"
@@ -141,22 +138,22 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
       </button>
 
       <div className="study-guide-output">
-        {/* 🆕 Display user prompts as chat bubbles */}
-        {userPrompts.map((prompt, index) => (
-          <div key={index} className="user-chat-bubble">
-            <p>{prompt}</p>
-          </div>
-        ))}
-        {conversation.length > 0 ? (
-          conversation.map((entry, index) => (
-            <div key={index} className={`message ${index % 2 === 0 ? "bot" : "user"}`}>
-              <p className="user-message"><strong>You:</strong> {entry.user_prompt}</p>
-              <p className="bot-message"><strong>TooturAI:</strong> <ReactMarkdown>{entry.response}</ReactMarkdown></p>
+        <div className="study-guide-content">
+          {/* 🆕 Display user prompts as chat bubbles */}
+          {conversation.length > 0 ? (
+            conversation.map((entry, index) => (
+              <div key={index} className={`message ${index % 2 === 0 ? "bot" : "user"}`}>
+                <p className="user-message"><strong>You:</strong> {entry.user_prompt}</p>
+                <p className="bot-message"><strong>TooturAI:</strong> <ReactMarkdown>{entry.response}</ReactMarkdown></p>
+              </div>
+            ))
+          ) : (
+            <div className="placeholder-container">
+                <p className="placeholder-text">Welcome to the Study Guide Generator</p>
+                <p className="placeholder-caption">Ask us anything. We'll help you study.</p>
             </div>
-          ))
-        ) : (
-          <p className="placeholder-text">Welcome to the Study Guide Generator.</p>
-        )}
+          )}
+        </div>
       </div>
 
       {/* New Study Guide Input */}
