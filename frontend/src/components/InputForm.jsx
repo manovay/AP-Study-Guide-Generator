@@ -126,15 +126,11 @@ function InputForm({ onStudyGuideGenerated, user, selectedStudyGuide, setSelecte
 
   return (
     <div className={`input-form ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-     {/* Sidebar Toggle Button (☰) - Only on Study Guide Page */}
-     <button
-        className="sidebar-toggle"
-        onClick={() => setIsSidebarOpen((prev) => !prev)} // ✅ Fix toggle behavior
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+      <button 
+        className={`sidebar-toggle ${isSidebarOpen ? 'open' : 'closed'}`}
+        onClick={() => setIsSidebarOpen((prev) => !prev)}
       >
         ☰
-        {isHovered && <span className="tooltip">Open Sidebar</span>}
       </button>
 
       <div className="study-guide-output">

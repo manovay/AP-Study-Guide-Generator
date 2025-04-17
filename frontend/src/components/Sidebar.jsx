@@ -144,8 +144,11 @@ function Sidebar({ onNavigate, onSelectHistory, onLogout, user, currentPage, set
   };
 
   return (
-    <div className={`sidebar ${!isSidebarOpen ? "closed" : ""}`}> {/* Fix className */}
-      <button className="sidebar-toggle" onClick={() => setIsSidebarOpen((prev) => !prev)}>
+    <div className={`sidebar ${!isSidebarOpen ? "closed" : ""}`}>
+      <button 
+        className="sidebar-toggle"
+        onClick={() => setIsSidebarOpen((prev) => !prev)}
+      >
         ☰
       </button>
       <ul className="nav-links-side">

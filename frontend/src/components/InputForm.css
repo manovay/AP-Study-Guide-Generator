@@ -272,4 +272,24 @@
     }
 }
 
+.sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 100;
+    transition: color 0.3s ease;
+}
+
+.sidebar-toggle.closed {
+    color: #202123;
+}
+
+.sidebar-toggle.open {
+    color: #ffffff;
+}
+
   

@@ -39,10 +39,21 @@
     left: 15px;
     background: none;
     border: none;
-    color: white;
+    color: #010101; /* Default black color */
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 100;
+    transition: color 0.3s ease;
+  }
+
+  /* When sidebar is open, make the button white */
+  .sidebar:not(.closed) .sidebar-toggle {
+    color: #ffffff;
+  }
+
+  /* When sidebar is closed, keep the button black */
+  .sidebar.closed .sidebar-toggle {
+    color: #000000;
   }
  
   /* Tooltip for Sidebar Button */
