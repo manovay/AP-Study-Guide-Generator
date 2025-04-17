@@ -1,2 +1,5 @@
+downloaded_files/
+
+
 # Ignore environment variables
 .env
