@@ -5,12 +5,15 @@ import json
 import PyPDF2
 from sentence_transformers import SentenceTransformer
 from pymongo import MongoClient
+from openai import OpenAI
 
+ai_client = OpenAI()
 load_dotenv()
 # ─── MongoDB Atlas Setup ─────────────────────────────────────────────────────
 # Expects your Atlas connection string in the MONGODB_URI environment variable:
 #   export MONGODB_URI="mongodb+srv://<user>:<pass>@cluster0.xyz.mongodb.net/?retryWrites=true&w=majority"
 MONGO_URI = os.getenv("MONGODB_URI") 
+OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 if not MONGO_URI:
     raise RuntimeError("Set the MONGODB_URI environment variable to your Atlas URI")
 
@@ -132,58 +135,123 @@ def load_index_and_metadata(index_file="faiss_index.index", metadata_file="metad
     return None, docs
 
 
-def retrieve_relevant_chunks(query, model, faiss_index, metadata, top_k=5):
+def retrieve_relevant_chunks(query, model, top_k=5, similarity_threshold=0.3):
     """
-    Given a query, encode it, then do a brute-force L2 search
-    over all embedded chunks to find the top_k closest.
+    Retrieve the top_k most similar chunks for a given query, filtered by a similarity threshold.
     """
     query_emb = model.encode(query).astype(np.float32)
-    distances = [
-        np.linalg.norm(np.array(doc['embedding'], dtype=np.float32) - query_emb)
-        for doc in metadata
+
+    # Load all vectors and metadata from MongoDB
+    cursor = chunks_coll.find({}, {"embedding": 1, "pdf_file": 1, "chunk_index": 1, "chunk_text": 1})
+    metadata, embeddings = [], []
+    for doc in cursor:
+        embeddings.append(doc["embedding"])
+        metadata.append({
+            "pdf_file": doc["pdf_file"],
+            "chunk_index": doc["chunk_index"],
+            "chunk_text": doc["chunk_text"]
+        })
+
+    embeddings = np.array(embeddings, dtype=np.float32)
+
+    # Compute cosine similarity
+    similarities = np.dot(embeddings, query_emb) / (
+        np.linalg.norm(embeddings, axis=1) * np.linalg.norm(query_emb)
+    )
+    top_indices = np.argsort(similarities)[-top_k:][::-1]
+    print("Top 10 similarity scores:", np.sort(similarities)[-10:])
+    # Filter by similarity threshold
+    results = []
+    for idx in top_indices:
+        if similarities[idx] >= similarity_threshold:
+            results.append({**metadata[idx], "score": float(similarities[idx])})
+    return results
+
+def generate_rag_response(query, retrieved_chunks):
+    """
+    Generate a response using GPT with retrieved chunks as context,
+    via the openai-python >=1.0.0 ChatCompletion client.
+    """
+    # 1. Build the context string
+    context = "\n\n".join(
+        f"Chunk {i+1}: {chunk['chunk_text']}"
+        for i, chunk in enumerate(retrieved_chunks)
+    )
+
+    # 2. Assemble messages
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert assistant. Use the provided context to answer "
+                "the user's question accurately, quoting from the context when helpful."
+            )
+        },
+        {
+            "role": "system",
+            "content": f"Context:\n{context}"
+        },
+        {
+            "role": "user",
+            "content": query
+        }
     ]
-    top_idxs = np.argsort(distances)[:top_k]
-    return [metadata[i] for i in top_idxs]
+
+    try:
+        response = ai_client.chat.completions.create(
+            model="gpt-4o-mini",            # or gpt-3.5-turbo, etc.
+            messages=messages,
+            max_completion_tokens=300,
+            temperature=0.7
+        )
+        # Extract the assistant’s reply
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+        print(f"Error generating response: {e}")
+        return None
+
+
+def rag_pipeline(query, model, top_k=5, similarity_threshold=0.3):
+    """
+    Full RAG pipeline: retrieve relevant chunks and generate a response.
+    """
+    # Step 1: Retrieve relevant chunks
+    retrieved_chunks = retrieve_relevant_chunks(query, model, top_k, similarity_threshold)
+    if not retrieved_chunks:
+        return "No relevant information found."
+
+    # Step 2: Generate a response using the retrieved chunks
+    response = generate_rag_response(query, retrieved_chunks)
+    return response
 
 
 def run_pdf_indexing(pdf_directory="downloaded_files", chunk_size=2000):
     """
     Build the chunk documents, store them in MongoDB Atlas, and
-    allow a user to query them interactively.
+    allow a user to query them interactively with RAG.
     """
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    # ensure the directory exists
-    if not os.path.exists(pdf_directory):
-        os.makedirs(pdf_directory)
-        print(f"Created directory: {pdf_directory}")
-        print("Please place your PDF files in this directory before continuing.")
-        return
 
-    # ensure there are PDFs to process
+    # Ensure there are PDFs to process
     if not any(fn.lower().endswith(".pdf") for fn in os.listdir(pdf_directory)):
         print(f"No PDF files found in {pdf_directory}. Please add some PDF files and run the script again.")
         return
 
-    # extract, chunk, encode
+    # Extract, chunk, encode, and store
     _, metadata = index_pdfs(pdf_directory, model, chunk_size=chunk_size)
     if not metadata:
         return
-
-    # save into Atlas & reload
     save_index_and_metadata(None, metadata)
-    _, metadata = load_index_and_metadata()
 
-    # interactive query
-    query = input("Enter your search query (e.g., 'create an APUSH study guide'): ")
-    print(f"\nQuery: {query}")
-    relevant_chunks = retrieve_relevant_chunks(query, model, None, metadata, top_k=5)
-
-    print("\nRelevant chunks:")
-    for chunk in relevant_chunks:
-        print(f"File: {chunk['pdf_file']}, Chunk: {chunk['chunk_index']}")
-        print(f"Snippet: {chunk['chunk_text'][:200]}...\n")
-
+    # Interactive query with RAG
+    while True:
+        query = input("Enter your search query (or type 'exit' to quit): ")
+        if query.lower() == "exit":
+            break
+        response = rag_pipeline(query, model, top_k=5, similarity_threshold=0.3)
+        print(f"\nResponse:\n{response}\n")
 
 if __name__ == "__main__":
     run_pdf_indexing()

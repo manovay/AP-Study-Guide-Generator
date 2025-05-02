@@ -53,7 +53,7 @@ def is_valid_link(link, base_url):
         and parsed_url.scheme in ["http", "https"]
     )
 
-def download_file(url, session, download_dir="../downloaded_files"):
+def download_file(url, session, download_dir="downloaded_files"):
     """
     Download a file (e.g., PDF) to the specified directory.
     """
