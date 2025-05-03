@@ -1,6 +1,8 @@
-# PDF Scraper and Vector Database Builder
+# PDF Scraper and Retrieval-Augmented Generator (RAG) System
 
-This project automates the process of scraping PDFs from AP (Advanced Placement) websites, extracting their content, splitting the text into chunks, generating vector embeddings for each chunk, and storing these embeddings in a vector database (using FAISS). It uses **Poetry** for dependency management.
+
+This project automates the pipeline for scraping AP (Advanced Placement) exam PDFs, extracting their content, splitting the text into semantic chunks, generating vector embeddings, and storing them in a searchable vector store (MongoDB Atlas). The system integrates with OpenAI's GPT models to enable **Retrieval-Augmented Generation (RAG)**, allowing users to query the dataset and receive grounded, contextualized answers.
+ It uses **Poetry** for dependency management.
 
 ## How It Works
 
@@ -19,10 +21,25 @@ This project automates the process of scraping PDFs from AP (Advanced Placement)
    - The PDF processing module reads the downloaded PDFs and extracts text using PyPDF2.
    - The extracted text is split into manageable chunks to preserve context.
    - Each text chunk is converted into a vector embedding using a pre-trained model (e.g., `all-MiniLM-L6-v2` from SentenceTransformer).
-   - All vector embeddings are then indexed using FAISS, and associated metadata is saved (e.g., PDF file name, chunk index, text snippet).
 
-4. **Persistence**
-   - The FAISS index and metadata are saved to disk for later retrieval, enabling quick and efficient similarity searches on the extracted content.
+4. **Vector Database (MongoDB Atlas)**
+   - Each chunk, along with its embedding and metadata (e.g., source PDF, chunk index), is stored in a **MongoDB collection**.
+   - A sample document in the database includes:
+     ```json
+     {
+       "pdf_file": "2020_APUSH_DBQ.pdf",
+       "chunk_index": 3,
+       "chunk_text": "...",
+       "embedding": [0.021, -0.004, ..., 0.108]
+     }
+     ```
+
+5. **Retrieval-Augmented Generation (RAG)**
+   - When a user submits a query, the system:
+     - Embeds the query using the same SentenceTransformer model.
+     - Retrieves top-matching chunks from MongoDB using cosine similarity.
+     - Sends the chunks and the user query to OpenAI’s GPT model (e.g., `gpt-4o-mini`) to generate a context-aware response.
+
 
 ## Setup Instructions
 
