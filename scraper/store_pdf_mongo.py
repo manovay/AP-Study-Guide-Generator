@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 import numpy as np
 import json
 import PyPDF2
@@ -7,8 +7,8 @@ from sentence_transformers import SentenceTransformer
 from pymongo import MongoClient
 from openai import OpenAI
 
-
-load_dotenv(find_dotenv())
+# Load .env from backend directory
+load_dotenv("backend/.env")
 
 # ─── MongoDB Atlas Setup ─────────────────────────────────────────────────────
 # Expects your Atlas connection string in the MONGODB_URI environment variable:
@@ -19,9 +19,9 @@ if not MONGO_URI:
     raise RuntimeError("Set the MONGODB_URI environment variable to your Atlas URI")
 ai_client = OpenAI()
 # Create a single, global client & collection reference
-client = MongoClient(MONGO_URI, tls=True)
-db = client["pdf_chunks_db"]
-chunks_coll = db["chunks"]
+client = MongoClient(MONGO_URI)  # Removed tls=True since it's already in the URI
+db = client["Tootur"]  # Changed from pdf_chunks_db to Tootur
+chunks_coll = db["chunks"]  # Collection name remains the same
 
 
 def extract_text_from_pdf(pdf_path):
@@ -210,12 +210,12 @@ def generate_rag_response(query, retrieved_chunks):
 
     try:
         response = ai_client.chat.completions.create(
-            model="gpt-4o-mini",            # or gpt-3.5-turbo, etc.
+            model="gpt-4",            # Changed from gpt-4o-mini to gpt-4
             messages=messages,
-            max_completion_tokens=300,
+            max_tokens=300,           # Changed max_completion_tokens to max_tokens
             temperature=0.7
         )
-        # Extract the assistant’s reply
+        # Extract the assistant's reply
         return response.choices[0].message.content.strip()
 
     except Exception as e:
@@ -264,5 +264,35 @@ def run_pdf_indexing(pdf_directory="downloaded_files", chunk_size=2000):
     #     response = rag_pipeline(query, model, top_k=5, similarity_threshold=0.3)
     #     print(f"\nResponse:\n{response}\n")
 
+def test_retrieval():
+    print("Loading SentenceTransformer model...")
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    
+    # Test query
+    test_query = "What are the main topics covered in the AP curriculum?"
+    print(f"\nTest query: {test_query}")
+    
+    # Retrieve relevant chunks
+    print("\nRetrieving relevant chunks...")
+    chunks = retrieve_relevant_chunks(test_query, model, top_k=3, similarity_threshold=0.3)
+    
+    if not chunks:
+        print("No relevant chunks found in the database.")
+        return
+        
+    print(f"\nFound {len(chunks)} relevant chunks:")
+    for i, chunk in enumerate(chunks, 1):
+        print(f"\nChunk {i}:")
+        print(f"From file: {chunk['pdf_file']}")
+        print(f"Similarity score: {chunk['score']:.3f}")
+        print("Content:")
+        print(chunk['chunk_text'][:300] + "..." if len(chunk['chunk_text']) > 300 else chunk['chunk_text'])
+    
+    # Generate RAG response
+    print("\nGenerating response using retrieved chunks...")
+    response = generate_rag_response(test_query, chunks)
+    print("\nGenerated Response:")
+    print(response)
+
 if __name__ == "__main__":
-    run_pdf_indexing()
+    test_retrieval()

@@ -73,8 +73,8 @@ async def save_study_guide(email: str, study_guide: dict):
 
     new_study_guide = {
         "_id": str(ObjectId()),  # Unique ID for the study guide
-        "title": study_guide["title"],  # Extracted from the topic
-        "content": study_guide["content"],
+        "title": study_guide.get("title", "Untitled Study Guide"),
+        "conversation": study_guide.get("conversation", []),
         "created_at": datetime.utcnow()
     }
 
