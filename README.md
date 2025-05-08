@@ -70,7 +70,8 @@ This project automates the pipeline for scraping AP (Advanced Placement) exam PD
    - Process the PDFs by extracting their content, chunking the text, generating vector embeddings, and storing the results in a FAISS vector index.
 
 ## Notes
-
+- **Demo Video:**
+  We have also uploaded a demo video on our github to demonstrate our fully functional web app!
 - **PDF Warnings:**  
   You may see warnings such as `unknown widths` or `ignore '/Perms' verify failed` during PDF processing. These are common with PyPDF2 when encountering non-standard PDF structures or permission entries. They can typically be ignored unless they affect the text extraction quality.
 
